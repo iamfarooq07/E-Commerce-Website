@@ -6,6 +6,7 @@ import CategoryFilter from "./components/CategoryFilter";
 import Products from "./components/Products";
 import Ratingfilter from "./components/Ratingfilter";
 import Pricefilter from "./components/Pricefilter";
+import SortingFilter from "./components/SortingFilter";
 
 function App() {
   // Rating Filter Logic
@@ -46,34 +47,42 @@ function App() {
     initPriceRange
   );
 
+  // Product Sorting Filter Logic
+  const [selectedSort, setSelectedSort] = useState("");
+
+  const sortProducts = (sortValue) => {
+    setSelectedSort(sortValue);
+  };
+
+  const sortedProducts = [...filteredProducts];
+
+  if (selectedSort === "ratingHightToLow") {
+    sortedProducts.sort((a, b) => b.rating - a.rating);
+  } else if (selectedSort === "ratingLowToHight") {
+    sortedProducts.sort((a, b) => a.rating - b.rating);
+  } else if (selectedSort === "PriceHightToLow") {
+    sortedProducts.sort((a, b) => b.price - a.price);
+  } else if (selectedSort === "PriceLowToHight") {
+    sortedProducts.sort((a, b) => a.price - b.price);
+  }
+
   return (
     <div>
       <div className="grid grid-cols-12 gap-3 my-2 mx-2">
         <div className="col-span-2">
+          {/* Category Filter */}
           <CategoryFilter
             selectedCategories={selectedCategories}
             onChangeCategory={onChangeCategoryHandler}
           />
-          <div className="shadow-2xl p-8 rounded border-2 mt-2 border-white flex justify-center items-center gap-2">
-            <p>{initPriceRange.min}</p>
-            <input
-              type="range"
-              className="w-40 h-10 text-lg border border-gray-400 rounded"
-              value={initPriceRange.max}
-              min={priceRange.min}
-              max={priceRange.max}
-              onChange={(e) => {
-                setInitPriceRange({
-                  ...initPriceRange,
-                  max: Number(e.target.value),
-                  isApplied: true,
-                });
-              }}
-            />
-            <p>{initPriceRange.max}</p>
-          </div>
 
-          {/* <Pricefilter /> */}
+          {/* Price Filter */}
+          <Pricefilter
+            init={initPriceRange}
+            price={priceRange}
+            setfun={setInitPriceRange}
+          />
+          {/* Rating Filter */}
           <Ratingfilter
             selectedRatings={selectedRatings}
             onChangeRating={onChangeRatingHandler}
@@ -81,7 +90,9 @@ function App() {
         </div>
 
         <div className="col-span-10">
-          <Products products={filteredProducts} />
+          <SortingFilter click={sortProducts} />
+          <hr className="my-4" />
+          <Products products={sortedProducts} />
         </div>
       </div>
     </div>

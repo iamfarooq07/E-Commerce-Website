@@ -15,10 +15,10 @@ function ProductCard(props) {
         {/*  */}
         <div className="flex mb-2 items-center">
           {[...Array(5)].map((val, index) => {
-            console.log(val);
+            // console.log(val);
 
             const filled = index < Math.round(product.rating);
-            console.log(filled);
+            // console.log(filled);
 
             return (
               <svg
@@ -49,7 +49,7 @@ function ProductCard(props) {
       </div>
       <div className="absolute w-full bottom-0 flex justify-between mb-2 px-6 pt-4 pb-2">
         <div className="font-bold text-lg">${product.price}</div>
-        <button className="flex gap-2 border px-2 py-1 rounded-lg cursor-pointer hover:bg-gray-100">
+        <button className="flex gap-2 border px-2 py-1 rounded-lg cursor-pointer hover:bg-white hover:text-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

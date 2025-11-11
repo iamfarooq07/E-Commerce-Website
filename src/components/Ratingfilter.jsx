@@ -2,7 +2,7 @@ import React from "react";
 
 function Ratingfilter({ selectedRatings, onChangeRating }) {
   const ratings = [5, 4, 3, 2, 1];
-  console.log(ratings);
+  // console.log(ratings);
 
   return (
     <div className="my-3">
