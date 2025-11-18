@@ -14,13 +14,6 @@ function Chipfilter({ seleted }) {
           </button>
         ))}
       </div>
-      <div>
-        <input
-          type="search"
-          placeholder="Search"
-          className="w-[25vw] bg-gray-800 p-2 rounded-xl"
-        />
-      </div>
     </div>
   );
 }
