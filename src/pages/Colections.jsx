@@ -8,7 +8,7 @@ import Ratingfilter from "../components/Ratingfilter";
 import Pricefilter from "../components/Pricefilter";
 import SortingFilter from "../components/SortingFilter";
 import Pagination from "../components/Pagination";
-import Chipfilter from "../components/chipfilter";
+import FilterChip from "../components/FilterChip";
 
 function Colections() {
   // Rating Filter Logic
@@ -117,7 +117,10 @@ function Colections() {
         </div>
 
         <div className="col-span-10">
-          <Chipfilter seleted={selectedCategories} />
+          <FilterChip
+            seleted={selectedCategories}
+            onRemoveCategory={onChangeCategoryHandler}
+          />
 
           <hr className="my-2" />
           <Products products={paginatedProducts} />
