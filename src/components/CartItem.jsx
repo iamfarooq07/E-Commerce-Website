@@ -1,7 +1,7 @@
 import { useCart } from "../context/CartContext";
-console.log(useCart());
 
 const CartItem = ({ item }) => {
+  console.log(CartItem);
   const { updateQuantity, removeFromCart } = useCart();
 
   const basePrice = Number(

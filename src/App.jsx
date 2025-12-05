@@ -6,14 +6,18 @@ import Footer from "./components/Footer";
 import ProductDetail from "./pages/ProductDetail";
 import ProductCard from "./pages/ProductCard";
 import Checkout from "./pages/Checkout";
+import Dashboard from "./pages/Dashboard";
+// import CartProvider from "./context/CartContext";
 
 function App() {
   return (
+    // <CartProvider>
+    // {" "}
     <div>
-      {/* <Navigation /> */}
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/dashborad" element={<Dashboard />} />
         <Route path="/Products" element={<Colections />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/Card" element={<ProductCard />} />
@@ -22,6 +26,9 @@ function App() {
       <Footer />
     </div>
   );
+  {
+    /* </CartProvider> */
+  }
 }
 
 export default App;

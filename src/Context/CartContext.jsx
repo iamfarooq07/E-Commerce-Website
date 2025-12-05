@@ -4,6 +4,8 @@ export const CartContext = createContext();
 
 export const useCart = () => {
   const context = useContext(CartContext);
+  // console.log(context);
+
   if (!context) {
     throw new Error("useCart must be used within a CartProvider");
   }
@@ -72,7 +74,7 @@ export default function CartProvider({ children }) {
 
   const totalCartItems = getTotalItems();
   const totalCartPrice = getTotalPrice();
-  console.log(totalCartPrice);
+  // console.log(totalCartPrice);
 
   return (
     <CartContext.Provider
