@@ -108,7 +108,7 @@ export default function Dashboard() {
                   className="w-12 h-12 rounded-full bg-white my-5 object-contain"
                 />
                 <div>
-                  <h3 className="text-xl font-bold">Shose</h3>
+                  <h3 className="text-xl font-bold">Broadway Pizza</h3>
                   <p className="text-xs text-gray-200">Admin Dashborad</p>
                 </div>
               </div>
