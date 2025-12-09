@@ -7,11 +7,11 @@ function Footer() {
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-4 md:grid-cols-4 gap-8">
           <div>
             <h2 className="text-2xl font-bold text-white">
-              Boradway Pizza Pakistan
+              Snackify Fast Food And Pizza
             </h2>
             <p className="mt-3 text-sm leading-6">
-              Building modern, clean and professional web experiences with React
-              & Tailwind.
+              Building tasty, clean, and interactive web experiences for
+              Snackffy using React & Tailwind.
             </p>
           </div>
 
@@ -47,7 +47,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm">
-          © {new Date().getFullYear()} Boradway Pizza Pakistan — All Rights
+          © {new Date().getFullYear()} Snackify Pizza Pakistan — All Rights
           Reserved.
         </div>
       </footer>

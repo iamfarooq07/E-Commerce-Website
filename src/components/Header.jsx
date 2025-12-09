@@ -1,31 +1,96 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import logo from "./logo.png";
 
 function Header() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="sticky top-0 flex justify-between items-center w-full px-20 border-b-2 bg-black">
-      <div>
-        <img
-          src="https://www.broadwaypizza.com.pk/assets/broadwayPizzaLogo.png"
-          alt=""
-          className="w-35 h-16 rounded-full"
-        />
+    <header className="sticky top-0 z-50 bg-black border-b border-gray-700 shadow-lg">
+      {/* Container */}
+      <div className="flex justify-between items-center px-6 md:px-20 h-20">
+        {/* Logo */}
+        <Link to="/">
+          <img src={logo} alt="logo" className="w-56 h-16 object-contain" />
+        </Link>
+
+        {/* Desktop Menu */}
+        <nav className="hidden md:flex gap-10 text-xl font-semibold">
+          <Link
+            to="/"
+            className="text-white hover:text-orange-400 duration-200"
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/dashboard"
+            className="text-white hover:text-orange-400 duration-200"
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            to="/products"
+            className="text-white hover:text-orange-400 duration-200"
+          >
+            Products
+          </Link>
+
+          <Link
+            to="/card"
+            className="text-white hover:text-orange-400 duration-200"
+          >
+            🛒
+          </Link>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-white text-3xl"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? "✖" : "☰"}
+        </button>
       </div>
 
-      <div className="flex gap-8 text-xl">
-        <Link to="/" className="text-white hover:text-orange-300">
-          Home
-        </Link>
-        <Link to="/dashborad" className="text-white hover:text-orange-300">
-          Dashborad
-        </Link>
-        <Link to="/products" className="text-white hover:text-orange-300">
-          Products
-        </Link>
-        <Link to="/Card" className="text-white hover:text-orange-300">
-          <i className="fa-solid fa-cart-shopping"></i>
-        </Link>
-      </div>
-    </div>
+      {/* Mobile Dropdown Menu */}
+      {open && (
+        <div className="md:hidden bg-black border-t border-gray-700 py-4 px-6 space-y-4 text-xl">
+          <Link
+            to="/"
+            className="block text-white hover:text-orange-400"
+            onClick={() => setOpen(false)}
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/dashboard"
+            className="block text-white hover:text-orange-400"
+            onClick={() => setOpen(false)}
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            to="/products"
+            className="block text-white hover:text-orange-400"
+            onClick={() => setOpen(false)}
+          >
+            Products
+          </Link>
+
+          <Link
+            to="/card"
+            className="block text-white hover:text-orange-400"
+            onClick={() => setOpen(false)}
+          >
+            🛒 Cart
+          </Link>
+        </div>
+      )}
+    </header>
   );
 }
 

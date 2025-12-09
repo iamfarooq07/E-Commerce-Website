@@ -1,4 +1,5 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import logo from "../components/logo.png";
 
 // Single-file React + Tailwind dashboard component
 // No external libraries required — only React and Tailwind CSS.
@@ -99,16 +100,13 @@ export default function Dashboard() {
           <div className="px-4 py-6 flex items-center justify-between">
             <div className={`${sidebarOpen ? "block" : "hidden"}`}>
               <div className="flex items-center gap-3">
-                {/* <div className="bg-gray-200 w-10 h-10 rounded-lg flex items-center justify-center text-gray-800 font-bold">
-                  S
-                </div> */}
                 <img
-                  src="https://t4.ftcdn.net/jpg/01/36/55/49/360_F_136554929_JG7RLQNfAKpAQlmRmdV7QhbEM1PDt6k2.jpg"
+                  src={logo}
                   alt="Logo"
                   className="w-12 h-12 rounded-full bg-white my-5 object-contain"
                 />
                 <div>
-                  <h3 className="text-xl font-bold">Broadway Pizza</h3>
+                  <h3 className="text-xl font-bold">Snackify Pizza</h3>
                   <p className="text-xs text-gray-200">Admin Dashborad</p>
                 </div>
               </div>
