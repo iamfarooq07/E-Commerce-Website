@@ -2,13 +2,13 @@ import { getVisibleProducts } from "../data/product-filters";
 import { useState } from "react";
 import { priceRange } from "../data/products";
 
-import CategoryFilter from "../components/CategoryFilter";
-import Products from "../components/Products";
-import Ratingfilter from "../components/Ratingfilter";
-import Pricefilter from "../components/Pricefilter";
-import SortingFilter from "../components/SortingFilter";
-import Pagination from "../components/Pagination";
-import FilterChip from "../components/FilterChip";
+import CategoryFilter from "../component/CategoryFilter";
+import Products from "../component/Products";
+import Ratingfilter from "../component/Ratingfilter";
+import Pricefilter from "../component/Pricefilter";
+import SortingFilter from "../component/SortingFilter";
+import Pagination from "../component/Pagination";
+import FilterChip from "../component/FilterChip";
 
 function Colections() {
   // Rating Filter Logic

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import logo from "../components/logo.png";
+import logo from "../../component/logo.png";
+import { Link } from "react-router-dom";
 
 // Single-file React + Tailwind dashboard component
 // No external libraries required — only React and Tailwind CSS.
@@ -133,29 +134,83 @@ export default function Dashboard() {
             </button>
           </div>
 
-          <nav className="mt-6 px-2 ">
-            {[
-              { name: "Dashboard", icon: DashboardIcon },
-              { name: "Products", icon: BoxIcon },
-              { name: "Orders", icon: OrdersIcon },
-              { name: "Customers", icon: UsersIcon },
-              { name: "Analytics", icon: ChartIcon },
-              { name: "Settings", icon: CogIcon },
-            ].map((item) => (
-              <a
-                key={item.name}
-                href="#"
-                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800"
-              >
-                <span className="w-6 h-6 flex items-center justify-center text-white hover:text-gray-800">
-                  <item.icon />
-                </span>
-                <span className={`${sidebarOpen ? "block" : "hidden"}`}>
-                  {item.name}
-                </span>
-              </a>
-            ))}
+          {/* --- */}
+          <nav className="mt-6 px-2 space-y-1">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <DashboardIcon />
+              </span>
+
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Dashboard
+              </span>
+            </Link>
+
+            <Link
+              to="/dashboard/product"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <BoxIcon />
+              </span>
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Products
+              </span>
+            </Link>
+
+            <Link
+              to="/dashboard/orders"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <OrdersIcon />
+              </span>
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Orders
+              </span>
+            </Link>
+
+            <a
+              href="/customers"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <UsersIcon />
+              </span>
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Customers
+              </span>
+            </a>
+
+            <a
+              href="/analytics"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <ChartIcon />
+              </span>
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Analytics
+              </span>
+            </a>
+
+            <a
+              href="/settings"
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
+            >
+              <span className="w-6 h-6 flex items-center justify-center">
+                <CogIcon />
+              </span>
+              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
+                Settings
+              </span>
+            </a>
           </nav>
+
+          {/* --- */}
 
           <div className={`${sidebarOpen ? "block" : "hidden"}`}>
             <div className="mt-auto p-4">
