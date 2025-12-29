@@ -1,13 +1,27 @@
-# Broadway Pizza 🍕
+# Food Side 🍕
 
-A modern React & Tailwind CSS e-commerce web app for ordering pizzas online.
+A modern React and Tailwind CSS web application for ordering pizzas online, enhanced with Shadcn UI components for a clean and interactive user interface.
 
 Features
 
-Responsive UI with Tailwind CSS
+ Fully responsive UI with Tailwind CSS and Shadcn UI components
 
-React Router for page navigation
+ React Router for seamless page navigation
 
-Toast notifications for cart actions
+ Toast notifications for cart actions (add/remove items, quantity updates)
 
-Add, remove, and adjust pizza quantities
+ Ability to add, remove, and adjust pizza quantities in the cart
+
+ Clean and intuitive frontend design focused on user experience
+
+Technologies
+
+ React.js
+
+ Tailwind CSS
+
+ Shadcn UI
+
+ React Router
+
+ React Toastify (for notifications)
