@@ -9,6 +9,9 @@ import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/dashboradUi/Dashboard";
 import CartProvider from "./contextFile/CartContext";
 import Orders from "./pages/dashboradUi/Orders";
+import CustomersSection from "./pages/dashboradUi/CustomersSection";
+import Analytics from "./pages/dashboradUi/Analytics";
+import Settings from "./pages/dashboradUi/Settings";
 
 function Website() {
   return (
@@ -21,6 +24,9 @@ function Website() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/orders" element={<Orders />} />
           <Route path="/dashboard/product" element={<Colections />} />
+          <Route path="/dashboard/customers" element={<CustomersSection />} />
+          <Route path="/dashboard/analytics" element={<Analytics />} />
+          <Route path="/dashboard/settings" element={<Settings />} />
           <Route path="/Products" element={<Colections />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/Card" element={<ProductCard />} />

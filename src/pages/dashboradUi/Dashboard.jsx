@@ -137,19 +137,6 @@ export default function Dashboard() {
           {/* --- */}
           <nav className="mt-6 px-2 space-y-1">
             <Link
-              to="/dashboard"
-              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
-            >
-              <span className="w-6 h-6 flex items-center justify-center">
-                <DashboardIcon />
-              </span>
-
-              <span className={`${sidebarOpen ? "block" : "hidden"}`}>
-                Dashboard
-              </span>
-            </Link>
-
-            <Link
               to="/dashboard/product"
               className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
             >
@@ -173,8 +160,8 @@ export default function Dashboard() {
               </span>
             </Link>
 
-            <a
-              href="/customers"
+            <Link
+              to="/dashboard/customers"
               className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
             >
               <span className="w-6 h-6 flex items-center justify-center">
@@ -183,10 +170,10 @@ export default function Dashboard() {
               <span className={`${sidebarOpen ? "block" : "hidden"}`}>
                 Customers
               </span>
-            </a>
+            </Link>
 
-            <a
-              href="/analytics"
+            <Link
+              to="/dashboard/analytics"
               className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
             >
               <span className="w-6 h-6 flex items-center justify-center">
@@ -195,10 +182,10 @@ export default function Dashboard() {
               <span className={`${sidebarOpen ? "block" : "hidden"}`}>
                 Analytics
               </span>
-            </a>
+            </Link>
 
-            <a
-              href="/settings"
+            <Link
+              to="/dashboard/settings"
               className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-white hover:bg-gray-200 hover:text-gray-800 transition"
             >
               <span className="w-6 h-6 flex items-center justify-center">
@@ -207,7 +194,7 @@ export default function Dashboard() {
               <span className={`${sidebarOpen ? "block" : "hidden"}`}>
                 Settings
               </span>
-            </a>
+            </Link>
           </nav>
 
           {/* --- */}

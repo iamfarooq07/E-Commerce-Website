@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function Orders() {
   const orders = [
@@ -39,8 +40,9 @@ export default function Orders() {
     <div>
       <Link
         to="/dashboard"
-        className="inline-block mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        className="fixed left-10 top-30 z-50 flex items-center gap-2 text-blue-500 text-lg hover:text-blue-600"
       >
+        <FaArrowLeft />
         Back
       </Link>
 
