@@ -308,5 +308,4 @@ const findRange = () => {
 
   return { min, max };
 };
-
 export const priceRange = findRange();

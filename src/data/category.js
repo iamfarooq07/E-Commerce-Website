@@ -14,6 +14,11 @@ export const categories = [
     title: "Pizza",
     image: "",
   },
+  {
+    id: 4,
+    title: "SandWich",
+    image: "",
+  },
 ];
 
 // get array of category title i.e, ['Burger', 'Shawarma'. 'Pizza']

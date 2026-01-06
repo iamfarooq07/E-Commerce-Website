@@ -39,7 +39,15 @@ export default function Home() {
       </h2>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-8 md:px-16">
+      <motion.div
+        initial={{ y: 200, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          duration: 0.4,
+          ease: "easeOut",
+        }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-8 md:px-16"
+      >
         {products.map((val, i) => (
           <div
             key={i}
@@ -48,7 +56,7 @@ export default function Home() {
             <Maincard product={val} />
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Center Promo Image Section */}
       <div className="mt-20 px-10">
