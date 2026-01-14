@@ -39,6 +39,12 @@ function Header() {
           >
             Products
           </Link>
+          <Link
+            to="/adminDashboard"
+            className="text-white font-sans hover:text-orange-400 duration-200"
+          >
+            Admin Dashborad
+          </Link>
 
           <Link
             to="/card"
