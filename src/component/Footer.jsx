@@ -46,9 +46,12 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm">
-          © {new Date().getFullYear()} Snackify Pizza Pakistan — All Rights
-          Reserved.
+        <div className="text-center">
+          <div className="border-t border-gray-700 mt-10 pt-4 text-sm">
+            © {new Date().getFullYear()} Snackify Pizza Pakistan — All Rights
+            Reserved.
+          </div>
+          <p className="pt-4 text-sm">Crafted with ❤️ by Muhammad Farooq</p>
         </div>
       </footer>
     </div>
