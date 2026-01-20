@@ -6,7 +6,7 @@ function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-black border-b border-gray-700 shadow-lg">
+    <header className="sticky top-0 z-50 bg-black border-b shadow-lg">
       {/* Container */}
       <div className="flex justify-between items-center px-6 h-20">
         <Link to="/">
@@ -18,10 +18,10 @@ function Header() {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-10 text-xl font-semibold">
+        <nav className="hidden md:flex gap-10 text-lg font-medium">
           <Link
             to="/"
-            className="text-white font-sans hover:text-orange-400 duration-200"
+            className="text-orange-400  font-sans hover:text-white duration-200"
           >
             Home
           </Link>
@@ -34,16 +34,16 @@ function Header() {
           </Link>
 
           <Link
-            to="/products"
-            className="text-white font-sans hover:text-orange-400 duration-200"
-          >
-            Products
-          </Link>
-          <Link
             to="/adminDashboard"
             className="text-white font-sans hover:text-orange-400 duration-200"
           >
             Admin Dashborad
+          </Link>
+          <Link
+            to="/products"
+            className="text-white font-sans hover:text-orange-400 duration-200"
+          >
+            Products
           </Link>
 
           <Link
