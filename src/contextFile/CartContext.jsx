@@ -17,7 +17,7 @@ export default function CartProvider({ children }) {
 
   const addToCart = (cartItem, cartQty, cartDrink) => {
     let productIndex = cartItems.findIndex(
-      (itm) => itm.id === cartItem.id && itm.cartDrink === cartDrink
+      (itm) => itm.id === cartItem.id && itm.cartDrink === cartDrink,
     );
 
     if (productIndex === -1) {
@@ -33,7 +33,7 @@ export default function CartProvider({ children }) {
 
   const updateCartQty = (cartItem, deltaQty) => {
     let index = cartItems.findIndex(
-      (itm) => itm.id === cartItem.id && itm.cartDrink === cartItem.cartDrink
+      (itm) => itm.id === cartItem.id && itm.cartDrink === cartItem.cartDrink,
     );
 
     if (index !== -1) {
@@ -47,7 +47,7 @@ export default function CartProvider({ children }) {
   const removeCartItem = (cartItem) => {
     // optimize code
     const filterdCartItems = cartItems.filter((item) =>
-      item.id === cartItem.id ? item.cartDrink !== cartItem.cartDrink : true
+      item.id === cartItem.id ? item.cartDrink !== cartItem.cartDrink : true,
     );
 
     // const filterdCartItems = cartItems.filter((item) => {

@@ -26,12 +26,12 @@ function Header() {
             Home
           </Link>
 
-          <Link
+          {/* <Link
             to="/dashboard"
             className="text-white font-sans hover:text-orange-400 duration-200"
           >
             Dashboard
-          </Link>
+          </Link> */}
 
           <Link
             to="/adminDashboard"

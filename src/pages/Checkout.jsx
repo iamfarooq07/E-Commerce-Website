@@ -1,16 +1,26 @@
 import React from "react";
 import { useCart } from "../contextFile/CartContext";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Checkout() {
   const { cartItems, getTotalPrice } = useCart();
   const total = getTotalPrice() ?? 0;
 
+  const navigate = useNavigate();
+
+  const handlePlaceOrder = () => {
+    toast.success("Order Placed Successfully!", {
+      autoClose: 1500,
+    });
+    navigate("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT SIDE: Shipping + Payment */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Shipping Info */}
+       
           <div className="bg-gray-800 text-gray-100 rounded-2xl shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,12 +122,12 @@ function Checkout() {
             </div>
           </div>
 
-          <div
-            to="/place-order"
+          <button
+            onClick={handlePlaceOrder}
             className="block w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl mt-6 text-center font-semibold"
           >
             Place Order
-          </div>
+          </button>
         </div>
       </div>
     </div>

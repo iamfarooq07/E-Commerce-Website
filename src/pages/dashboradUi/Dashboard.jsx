@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../component/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Calendar } from "lucide-react";
 
 // Single-file React + Tailwind dashboard component
@@ -79,6 +79,8 @@ function Sparkline({ data = [], width = 120, height = 28 }) {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState("All");
@@ -87,7 +89,7 @@ export default function Dashboard() {
     (t) =>
       selected === "All" ||
       t.category === selected ||
-      t.name.toLowerCase().includes(query.toLowerCase())
+      t.name.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -223,8 +225,8 @@ export default function Dashboard() {
         {/* Main content */}
         <main className="flex-1 p-6">
           {/* Topbar */}
-          <div className="flex items-center justify-between gap-4">
-            {/* <div className="flex items-center gap-4">
+          {/* <div className="flex items-center justify-between gap-4"> */}
+          {/* <div className="flex items-center gap-4">
               <div className="relative">
                 <input
                   value={query}
@@ -258,10 +260,11 @@ export default function Dashboard() {
               </div>
             </div> */}
 
-            <div className="flex items-center gap-3">
-              {/* <button className="p-2 rounded-full hover:bg-gray-100 hover:text-gray-800">
+          <div className="flex items-center gap-3">
+            {/* <button className="p-2 rounded-full hover:bg-gray-100 hover:text-gray-800">
                 <BellIcon />
               </button> */}
+            <div className="flex justify-between items-center w-full px-4">
               <div className="flex items-center gap-2">
                 <img
                   src="https://www.shutterstock.com/image-vector/flat-vector-smiling-boy-headphones-600nw-2606713523.jpg"
@@ -273,8 +276,18 @@ export default function Dashboard() {
                   <div className="text-xs text-gray-200">Admin</div>
                 </div>
               </div>
+
+              <div className="flex justify-center ">
+                <button
+                  onClick={() => navigate("/Products")}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-xl shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+                >
+                  Go Products
+                </button>
+              </div>
             </div>
           </div>
+          {/* </div> */}
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
@@ -360,8 +373,8 @@ export default function Dashboard() {
                         row.status === "Active"
                           ? "text-green-600"
                           : row.status === "Low"
-                          ? "text-yellow-600"
-                          : "text-gray-200"
+                            ? "text-yellow-600"
+                            : "text-gray-200"
                       }`}
                     >
                       {row.status}
