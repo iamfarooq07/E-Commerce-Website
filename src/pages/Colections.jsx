@@ -30,7 +30,7 @@ function Colections() {
       setSelectedCategories([...selectedCategories, category]);
     } else {
       setSelectedCategories(
-        selectedCategories.filter((cat) => cat !== category)
+        selectedCategories.filter((cat) => cat !== category),
       );
     }
   };
@@ -46,7 +46,7 @@ function Colections() {
   const filteredProducts = getVisibleProducts(
     selectedCategories,
     selectedRatings,
-    initPriceRange
+    initPriceRange,
   );
 
   // Product Sorting Filter Logic
@@ -109,7 +109,7 @@ function Colections() {
           {/* <button className="relative mb-2 p-2 w-full border-2 overflow-hidden rounded-xl bg-black text-white cursor-pointer group">
             <span className="relative z-10">Clear All</span>
             <span
-              className="absolute top-0 left-0 w-full h-full rounded-xl 
+              className="absolute top-0 left-0 w-full h-full rounded-xl
              hover:border-none bg-gray-500 scale-x-0 origin-left transition-transform group-hover:scale-x-100"
             ></span>
           </button> */}

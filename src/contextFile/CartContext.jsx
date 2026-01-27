@@ -14,14 +14,17 @@ export const useCart = () => {
 
 export default function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
+  console.log(cartItems);
 
   const addToCart = (cartItem, cartQty, cartDrink) => {
     let productIndex = cartItems.findIndex(
       (itm) => itm.id === cartItem.id && itm.cartDrink === cartDrink,
     );
+    console.log(productIndex);
 
     if (productIndex === -1) {
       let product = { ...cartItem, cartQty, cartDrink };
+      console.log(product);
 
       setCartItems([...cartItems, product]);
     } else {

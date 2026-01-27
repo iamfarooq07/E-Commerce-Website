@@ -20,7 +20,6 @@ function Checkout() {
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-       
           <div className="bg-gray-800 text-gray-100 rounded-2xl shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
