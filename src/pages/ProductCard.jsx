@@ -52,8 +52,8 @@ const Cart = () => {
             </div>
 
             <div className="bg-gray-800">
-              {cartItems.map((item) => (
-                <CartItem key={item.cartItemId} item={item} />
+              {cartItems.map((item, index) => (
+                <CartItem key={index} item={item} />
               ))}
             </div>
           </div>
@@ -84,7 +84,8 @@ const Cart = () => {
 
               {/* Checkout Button */}
               <Link
-                to={"/Checkout"}
+                // to={"/Checkout"}
+                to={"/sign"}
                 className="block w-full bg-blue-600 hover:bg-blue-500 transition text-white text-center py-3 rounded-xl font-semibold shadow-lg mb-3"
               >
                 Proceed to Checkout
