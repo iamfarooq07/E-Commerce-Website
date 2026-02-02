@@ -12,43 +12,50 @@ function Header() {
         <Link to="/">
           <img
             src={logo}
-            alt="logo"
+            alt="Website Logo"
             className="hidden md:block w-56 h-16 object-contain"
           />
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-10 text-lg font-medium">
+        <nav className="hidden md:flex items-center gap-10 text-lg font-medium">
           <Link
             to="/"
-            className="text-orange-400  font-sans hover:text-white duration-200"
+            className="text-orange-400 hover:text-white transition duration-200"
           >
             Home
           </Link>
 
           {/* <Link
-            to="/dashboard"
-            className="text-white font-sans hover:text-orange-400 duration-200"
+            to="/adminDashboard"
+            className="text-white hover:text-orange-400 transition duration-200"
           >
-            Dashboard
+            Admin Dashboard
           </Link> */}
 
           <Link
-            to="/adminDashboard"
-            className="text-white font-sans hover:text-orange-400 duration-200"
-          >
-            Admin Dashborad
-          </Link>
-          <Link
             to="/products"
-            className="text-white font-sans hover:text-orange-400 duration-200"
+            className="text-white hover:text-orange-400 transition duration-200"
           >
             Products
           </Link>
-
+          <div className="flex gap-3">
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-gray-800 rounded-md text-white hover:bg-gray-700 transition"
+            >
+              Login
+            </Link>
+            <Link
+              to="/sign"
+              className="px-4 py-2 bg-gray-800 rounded-md text-white hover:bg-gray-700 transition"
+            >
+              Sign Up
+            </Link>
+          </div>
           <Link
-            to="/card"
-            className="text-white hover:text-orange-400 duration-200"
+            to="/cart"
+            className="text-white hover:text-orange-400 transition duration-200 text-xl"
           >
             🛒
           </Link>
@@ -56,6 +63,7 @@ function Header() {
 
         {/* Mobile Menu Button */}
         <button
+          aria-label="Toggle Menu"
           className="md:hidden text-white text-3xl"
           onClick={() => setOpen(!open)}
         >

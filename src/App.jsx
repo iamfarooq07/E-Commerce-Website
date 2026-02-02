@@ -1,7 +1,7 @@
 import React from "react";
 import Website from "./Website";
 import Login from "./auth/Login";
-import Sign from "./auth/Sign";
+import Sign from "./auth/Signup";
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {

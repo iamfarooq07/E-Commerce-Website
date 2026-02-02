@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Colections from "./pages/Colections";
 import Header from "./component/Header";
@@ -14,13 +14,22 @@ import Analytics from "./pages/dashboradUi/Analytics";
 import Settings from "./pages/dashboradUi/Settings";
 import { Calendar18 } from "./pages/Calendar18";
 import AdminDashboard from "./pages/AdminDashboard";
+import Login from "./auth/Login";
+import Signup from "./auth/Signup";
 
 function Website() {
+  const location = useLocation();
+
+  // Routes where footer should be hidden
+  const hideFooterRoutes = ["/login", "/sign"];
+
+  const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
+
   return (
     <CartProvider>
-      {" "}
       <div>
         <Header />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -31,12 +40,15 @@ function Website() {
           <Route path="/dashboard/analytics" element={<Analytics />} />
           <Route path="/dashboard/settings" element={<Settings />} />
           <Route path="/dashboard/calendar" element={<Calendar18 />} />
-          <Route path="/Products" element={<Colections />} />
+          <Route path="/products" element={<Colections />} />
           <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/Card" element={<ProductCard />} />
-          <Route path="/Checkout" element={<Checkout />} />
+          <Route path="/cart" element={<ProductCard />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign" element={<Signup />} />
         </Routes>
-        <Footer />
+
+        {shouldShowFooter && <Footer />}
       </div>
     </CartProvider>
   );

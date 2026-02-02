@@ -2,16 +2,16 @@ import React from "react";
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Login to Your Account
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-lg p-8">
+        <h2 className="text-4xl font-bold text-center text-white mb-6">
+          Login
         </h2>
 
         <form className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-white mb-1">
               Email
             </label>
             <input
@@ -23,7 +23,7 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-white mb-1">
               Password
             </label>
             <input
@@ -54,7 +54,7 @@ const Login = () => {
         </form>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-200 mt-6">
           Don’t have an account?{" "}
           <a href="#" className="text-blue-600 font-medium hover:underline">
             Sign up
