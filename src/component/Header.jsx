@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import logo from "./logo.png";
 
+// import login from "../auth/Login";
+
 function Header() {
   const [open, setOpen] = useState(false);
 
@@ -16,9 +18,7 @@ function Header() {
             className="hidden md:block w-56 h-16 object-contain"
           />
         </Link>
-
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-10 text-lg font-medium">
+        <nav className="hidden md:flex items-center gap-10 text-lg font-medium relative">
           <Link
             to="/"
             className="text-orange-400 hover:text-white transition duration-200"
@@ -26,39 +26,55 @@ function Header() {
             Home
           </Link>
 
-          {/* <Link
-            to="/adminDashboard"
-            className="text-white hover:text-orange-400 transition duration-200"
-          >
-            Admin Dashboard
-          </Link> */}
-
           <Link
             to="/products"
             className="text-white hover:text-orange-400 transition duration-200"
           >
             Products
           </Link>
-          <div className="flex gap-3">
-            <Link
-              to="/login"
-              className="px-4 py-2 bg-gray-800 rounded-md text-white hover:bg-gray-700 transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/sign"
-              className="px-4 py-2 bg-gray-800 rounded-md text-white hover:bg-gray-700 transition"
-            >
-              Sign Up
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="text-white hover:text-orange-400 transition duration-200"
+          >
+            Login
+          </Link>
+          <Link
+            to="/sign"
+            className="text-white hover:text-orange-400 transition duration-200"
+          >
+            Sign Up
+          </Link>
+
+          {/* Cart */}
           <Link
             to="/cart"
             className="text-white hover:text-orange-400 transition duration-200 text-xl"
           >
             🛒
           </Link>
+
+          {/* User Section */}
+          <div className="relative flex items-center gap-2 cursor-pointer group">
+            <div
+              className="w-10 h-10 rounded-full bg-indigo-600 text-white
+  flex items-center justify-center font-bold uppercase"
+            >
+              {/* {idName} */}
+            </div>
+
+            <span className="font-medium text-white text-sm">Farooq</span>
+
+            {/* Dropdown */}
+            <div
+              className="absolute right-0 top-14 w-40 bg-white rounded-lg shadow-lg
+      opacity-0 invisible group-hover:opacity-100 group-hover:visible
+      transition-all duration-200"
+            >
+              <button className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                Logout
+              </button>
+            </div>
+          </div>
         </nav>
 
         {/* Mobile Menu Button */}

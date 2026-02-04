@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [idName, setIdName] = useState("");
+  console.log(idName);
 
   const login = async (e) => {
     e.preventDefault();
@@ -21,9 +23,7 @@ const Login = () => {
       toast.success("Login SuccessFully", {
         autoClose: 2000,
       });
-      // console.log(data.user.id);
-      if (data.user.id) {
-      }
+      setIdName(data.user.email.slice(0, 1).toUpperCase());
     }
   };
 
