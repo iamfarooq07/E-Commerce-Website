@@ -35,8 +35,10 @@ const Signup = () => {
       toast.success("Signup successful! Check your email.", {
         autoClose: 2000,
       });
-      console.log(data);
-      navigate("/login");
+      setConfirmPassword("");
+      setEmail("");
+      setFullname("");
+      setPassword("");
     }
   };
   return (

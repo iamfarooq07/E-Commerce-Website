@@ -2,12 +2,12 @@ import { supabase } from "@/supabase/Supabase";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "@/contextFile/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [idName, setIdName] = useState("");
-  console.log(idName);
+  const { setUser, setIdName } = useAuth();
 
   const login = async (e) => {
     e.preventDefault();
@@ -19,10 +19,9 @@ const Login = () => {
 
     if (error) {
       toast.error(error.message);
-    } else {
-      toast.success("Login SuccessFully", {
-        autoClose: 2000,
-      });
+    } else if (data) {
+      toast.success("Login Successfully", { autoClose: 2000 });
+      setUser(data.user);
       setIdName(data.user.email.slice(0, 1).toUpperCase());
     }
   };
