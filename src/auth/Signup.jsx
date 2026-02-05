@@ -35,11 +35,11 @@ const Signup = () => {
       toast.success("Signup successful! Check your email.", {
         autoClose: 2000,
       });
-      setConfirmPassword("");
-      setEmail("");
-      setFullname("");
-      setPassword("");
     }
+    setEmail("");
+    setConfirmPassword("");
+    setFullname("");
+    setPassword("");
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
@@ -55,6 +55,7 @@ const Signup = () => {
               Full Name
             </label>
             <input
+              value={fullName}
               onChange={(e) => setFullname(e.target.value)}
               type="text"
               placeholder="Enter your name"
@@ -68,6 +69,7 @@ const Signup = () => {
               Email
             </label>
             <input
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Enter your email"
@@ -81,6 +83,7 @@ const Signup = () => {
               Password
             </label>
             <input
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Create a password"
@@ -94,6 +97,7 @@ const Signup = () => {
               Confirm Password
             </label>
             <input
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               type="password"
               placeholder="Confirm your password"

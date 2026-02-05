@@ -12,7 +12,7 @@ export const useCart = () => {
 
 export default function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
-  console.log(cartItems);
+  // console.log(cartItems);
 
   const addToCart = (cartItem, cartQty, cartDrink) => {
     let productIndex = cartItems.findIndex(

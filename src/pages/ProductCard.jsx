@@ -2,9 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../contextFile/CartContext";
 import { toast } from "react-toastify";
 import CartItem from "../component/CartItem";
+import { useAuth } from "@/contextFile/AuthContext";
 
 const Cart = () => {
-  const navigate = useNavigate();
+  const { user, idName, logout } = useAuth();
+
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const total = getTotalPrice();
 
@@ -83,13 +85,30 @@ const Cart = () => {
               </div>
 
               {/* Checkout Button */}
-              <Link
+              {/* <Link
                 // to={"/Checkout"}
                 to={"/sign"}
                 className="block w-full bg-blue-600 hover:bg-blue-500 transition text-white text-center py-3 rounded-xl font-semibold shadow-lg mb-3"
               >
                 Proceed to Checkout
-              </Link>
+              </Link> */}
+
+              {/* Checkout Button */}
+              {user ? (
+                <Link
+                  to={"/Checkout"}
+                  className="block w-full bg-blue-600 hover:bg-blue-500 transition text-white text-center py-3 rounded-xl font-semibold shadow-lg mb-3"
+                >
+                  Proceed to Checkout
+                </Link>
+              ) : (
+                <Link
+                  to={"/sign"}
+                  className="block w-full bg-blue-600 hover:bg-blue-500 transition text-white text-center py-3 rounded-xl font-semibold shadow-lg mb-3"
+                >
+                  Login / Sign Up to Checkout
+                </Link>
+              )}
 
               {/* Continue Shopping */}
               <Link

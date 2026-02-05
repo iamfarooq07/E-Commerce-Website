@@ -24,6 +24,8 @@ const Login = () => {
       setUser(data.user);
       setIdName(data.user.email.slice(0, 1).toUpperCase());
     }
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -40,6 +42,7 @@ const Login = () => {
               Email
             </label>
             <input
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Enter your email"
@@ -53,6 +56,7 @@ const Login = () => {
               Password
             </label>
             <input
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Enter your password"
