@@ -170,18 +170,6 @@ const ProductDetail = () => {
                 )}
               </div>
             </div>
-
-            {/* Thumbnail Gallery (if you have multiple images) */}
-            {/* <div className="grid grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((num) => (
-                <div
-                  key={num}
-                  className="bg-white rounded-xl shadow-sm overflow-hidden p-2 cursor-pointer hover:shadow-md transition-shadow"
-                >
-                  <div className="aspect-square bg-gray-100 rounded-lg"></div>
-                </div>
-              ))}
-            </div> */}
           </div>
 
           {/* Product Details */}
@@ -333,11 +321,12 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="w-full ">
                   <button
                     onClick={handleAddToCart}
                     disabled={isAdding}
-                    className="group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl active:shadow-md disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="flex items-center bg-blue-500 justify-center w-full px-6 py-4 text-lg font-semibold rounded-md 
+    transition-all duration-200"
                   >
                     {isAdding ? (
                       <>
@@ -382,30 +371,6 @@ const ProductDetail = () => {
                         Add to Cart
                       </>
                     )}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      handleAddToCart();
-                      navigate("/checkout");
-                    }}
-                    className="bg-gradient-to-r from-gray-900 to-black text-white py-4 rounded-xl font-semibold text-lg hover:from-black hover:to-gray-900 transition-all shadow-lg hover:shadow-xl active:shadow-md flex items-center justify-center gap-3"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                    Buy Now
                   </button>
                 </div>
               </div>
