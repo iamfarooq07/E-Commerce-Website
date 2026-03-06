@@ -1,7 +1,7 @@
-import { supabase } from "@/supabase/Supabase";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,6 +10,9 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   const signup = async (e) => {
     e.preventDefault();
@@ -19,23 +22,42 @@ const Signup = () => {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-      },
-    });
-
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Signup successful! Check your email.", {
-        autoClose: 2000,
-      });
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
     }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`${API_URL}/ecommerce/auth/register`, {
+        name: fullName,
+        email: email,
+        password: password
+      });
+
+      if (response.data.success) {
+        // Store token and user data
+        localStorage.setItem('ecommerce_token', response.data.token);
+        localStorage.setItem('ecommerce_user', JSON.stringify(response.data.user));
+        
+        toast.success("Signup successful! Redirecting...", {
+          autoClose: 2000,
+        });
+
+        // Redirect to home or dashboard
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || "Signup failed. Please try again.";
+      toast.error(message);
+      console.error('Signup error:', error);
+    } finally {
+      setLoading(false);
+    }
+
     setEmail("");
     setConfirmPassword("");
     setFullname("");
@@ -119,9 +141,10 @@ const Signup = () => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
 

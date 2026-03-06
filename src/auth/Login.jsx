@@ -1,29 +1,61 @@
-import { supabase } from "@/supabase/Supabase";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "@/contextFile/AuthContext";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { setUser, setIdName } = useAuth();
+  const navigate = useNavigate();
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   const login = async (e) => {
     e.preventDefault();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      toast.error(error.message);
-    } else if (data) {
-      toast.success("Login Successfully", { autoClose: 2000 });
-      setUser(data.user);
-      setIdName(data.user.email.slice(0, 1).toUpperCase());
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
     }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`${API_URL}/ecommerce/auth/login`, {
+        email: email,
+        password: password
+      });
+
+      if (response.data.success) {
+        const { user, token } = response.data;
+        
+        // Store token and user data
+        localStorage.setItem('ecommerce_token', token);
+        localStorage.setItem('ecommerce_user', JSON.stringify(user));
+
+        toast.success("Login Successfully", { autoClose: 2000 });
+        
+        setUser(user);
+        setIdName(user.name.charAt(0).toUpperCase());
+
+        // Redirect based on role
+        if (user.role === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || "Login failed. Please try again.";
+      toast.error(message);
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
+
     setEmail("");
     setPassword("");
   };
@@ -78,9 +110,10 @@ const Login = () => {
           {/* Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { supabase } from "@/supabase/Supabase";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -15,24 +15,35 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [idName, setIdName] = useState("");
 
-  // 🔹 Page refresh par user restore
+  // Restore user from localStorage on page refresh (MongoDB auth)
   useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session?.user) {
-        setUser(data.session.user);
-        setIdName(
-          data.session.user.email.slice(0, 1).toUpperCase()
-        );
+    const storedUser = localStorage.getItem('ecommerce_user');
+    const token = localStorage.getItem('ecommerce_token');
+    
+    if (storedUser && token) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        setIdName(userData.name?.charAt(0).toUpperCase() || userData.email?.charAt(0).toUpperCase() || "");
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        // Clear invalid data
+        localStorage.removeItem('ecommerce_user');
+        localStorage.removeItem('ecommerce_token');
       }
-    };
-    getSession();
+    }
   }, []);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
+  const logout = () => {
+    // Clear MongoDB auth tokens
+    localStorage.removeItem('ecommerce_token');
+    localStorage.removeItem('ecommerce_user');
+    localStorage.removeItem('supabase_token');
     setUser(null);
     setIdName("");
+    
+    // Optional: redirect to login
+    // window.location.href = '/login';
   };
 
   return (
