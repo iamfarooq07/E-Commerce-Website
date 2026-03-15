@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CenterImage from "./CenterImage";
 import MainImage from "./MainImage";
-import { products } from "../data/products";
 import Maincard from "./Maincard";
 import { motion } from "motion/react";
+import { fetchPublicProducts } from "../services/api";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPublicProducts()
+      .then(setProducts)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white pb-20">
       <div className="relative w-full">
@@ -17,10 +27,7 @@ export default function Home() {
           <motion.h1
             initial={{ x: -200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{
-              duration: 1,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 1, ease: "easeOut" }}
             className="text-5xl md:text-6xl font-extrabold tracking-wide drop-shadow-xl"
           >
             Welcome to Snackify
@@ -38,25 +45,28 @@ export default function Home() {
         Our Food Items
       </h2>
 
+      {loading && (
+        <p className="text-center text-gray-400">Loading products...</p>
+      )}
+
       {/* Product Grid */}
-      <motion.div
-        initial={{ y: 200, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          duration: 0.4,
-          ease: "easeOut",
-        }}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-8 md:px-16"
-      >
-        {products.map((val, i) => (
-          <div
-            key={i}
-            className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:border-orange-500 hover:shadow-orange-500/20 transition duration-300 hover:-translate-y-1"
-          >
-            <Maincard product={val} />
-          </div>
-        ))}
-      </motion.div>
+      {!loading && (
+        <motion.div
+          initial={{ y: 200, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-8 md:px-16"
+        >
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:border-orange-500 hover:shadow-orange-500/20 transition duration-300 hover:-translate-y-1"
+            >
+              <Maincard product={product} />
+            </div>
+          ))}
+        </motion.div>
+      )}
 
       {/* Center Promo Image Section */}
       <div className="mt-20 px-10">

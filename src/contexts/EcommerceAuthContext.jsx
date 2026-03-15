@@ -41,13 +41,10 @@ export default function EcommerceAuthProvider({ children }) {
   );
 
   // Response interceptor - handle errors
+  // Note: only auto-logout on 401 after initial load is complete
   api.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401) {
-        // Token expired or invalid
-        logout();
-      }
       return Promise.reject(error);
     }
   );
@@ -60,12 +57,14 @@ export default function EcommerceAuthProvider({ children }) {
 
       if (token && storedUser) {
         try {
+          // Restore user from storage immediately so protected routes don't flash
           setUser(JSON.parse(storedUser));
-          // Optionally verify token with backend
+          // Try to refresh from backend, but don't logout on failure
+          // (backend may be temporarily unavailable)
           await fetchUserProfile();
         } catch (err) {
-          console.error('Error loading user:', err);
-          logout();
+          console.error('Error fetching profile, using cached user:', err);
+          // Keep the stored user — don't force logout on network errors
         }
       }
       setLoading(false);
@@ -77,7 +76,7 @@ export default function EcommerceAuthProvider({ children }) {
   // Fetch user profile from backend
   const fetchUserProfile = async () => {
     try {
-      const response = await api.get('/ecommerce/auth/me');
+      const response = await api.get('/auth/me');
       if (response.data.success) {
         setUser(response.data.user);
         localStorage.setItem('ecommerce_user', JSON.stringify(response.data.user));
@@ -94,7 +93,7 @@ export default function EcommerceAuthProvider({ children }) {
       setLoading(true);
       setError(null);
 
-      const response = await api.post('/ecommerce/auth/register', {
+      const response = await api.post('/auth/register', {
         name,
         email,
         password
@@ -130,7 +129,7 @@ export default function EcommerceAuthProvider({ children }) {
       setLoading(true);
       setError(null);
 
-      const response = await api.post('/ecommerce/auth/login', {
+      const response = await api.post('/auth/login', {
         email,
         password
       });
@@ -172,7 +171,7 @@ export default function EcommerceAuthProvider({ children }) {
   const updateProfile = async (profileData) => {
     try {
       setLoading(true);
-      const response = await api.put('/ecommerce/auth/profile', profileData);
+      const response = await api.put('/auth/profile', profileData);
 
       if (response.data.success) {
         setUser(response.data.user);
@@ -191,7 +190,7 @@ export default function EcommerceAuthProvider({ children }) {
   const updatePassword = async (currentPassword, newPassword) => {
     try {
       setLoading(true);
-      const response = await api.put('/ecommerce/auth/password', {
+      const response = await api.put('/auth/password', {
         currentPassword,
         newPassword
       });

@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../contextFile/CartContext";
+
 function ProductCard(props) {
   const { product } = props;
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e) => {
+    e.preventDefault(); // prevent Link navigation if nested
+    addToCart(product, 1, { id: 0, name: "No Drink", price: 0 });
+  };
+
   return (
     <div className="relative bg-gray-800 border-2 border-white  max-w-sm rounded-xl overflow-hidden shadow-lg">
       <Link to={`/products/${product.id}`}>
@@ -51,7 +60,7 @@ function ProductCard(props) {
       </div>
       <div className="absolute w-full bottom-0 flex justify-between mb-2 px-6 pt-4 pb-2">
         <div className="font-bold text-lg">${product.price}</div>
-        <button className="flex gap-2 border px-2 py-1 rounded-lg cursor-pointer hover:bg-white hover:text-black">
+        <button onClick={handleAddToCart} className="flex gap-2 border px-2 py-1 rounded-lg cursor-pointer hover:bg-white hover:text-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

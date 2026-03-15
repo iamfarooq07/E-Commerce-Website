@@ -1,62 +1,61 @@
-import axios from 'axios';
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+const getHeaders = () => ({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${localStorage.getItem('ecommerce_token') || ''}`,
 });
 
-// Add token to requests automatically
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Handle response errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Authentication APIs
-export const authAPI = {
-  register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
-  getProfile: () => api.get('/user/profile')
+const handleResponse = async (res) => {
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Request failed');
+  return data;
 };
 
-// Food Items APIs
-export const foodAPI = {
-  getAllFood: (params) => api.get('/food', { params }),
-  getFoodById: (id) => api.get(`/food/${id}`),
-  createFood: (data) => api.post('/food', data)
+// Admin stats
+export const fetchAdminStats = () =>
+  fetch(`${API_URL}/admin/stats`, { headers: getHeaders() }).then(handleResponse);
+
+// Admin orders
+export const fetchAdminOrders = () =>
+  fetch(`${API_URL}/admin/orders`, { headers: getHeaders() }).then(handleResponse);
+
+export const updateOrderStatus = (id, status) =>
+  fetch(`${API_URL}/admin/orders/${id}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify({ status }),
+  }).then(handleResponse);
+
+// Admin users
+export const fetchAdminUsers = () =>
+  fetch(`${API_URL}/admin/users`, { headers: getHeaders() }).then(handleResponse);
+
+// Public products (customer-facing)
+export const fetchPublicProducts = (params = {}) => {
+  const query = new URLSearchParams(params).toString();
+  return fetch(`${API_URL}/food${query ? `?${query}` : ''}`).then(handleResponse);
 };
 
-// Orders APIs
-export const orderAPI = {
-  createOrder: (data) => api.post('/orders', data),
-  getMyOrders: () => api.get('/orders/myorders'),
-  getOrderById: (id) => api.get(`/orders/${id}`)
-};
+// Products CRUD (admin)
+export const fetchProducts = () =>
+  fetch(`${API_URL}/admin/products`, { headers: getHeaders() }).then(handleResponse);
 
-export default api;
+export const createProduct = (data) =>
+  fetch(`${API_URL}/admin/products`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  }).then(handleResponse);
+
+export const updateProduct = (id, data) =>
+  fetch(`${API_URL}/admin/products/${id}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  }).then(handleResponse);
+
+export const deleteProduct = (id) =>
+  fetch(`${API_URL}/admin/products/${id}`, {
+    method: 'DELETE',
+    headers: getHeaders(),
+  }).then(handleResponse);

@@ -14,7 +14,6 @@ import {
   ShoppingCart,
   DollarSign,
   LayoutDashboard,
-  Settings,
 } from "lucide-react";
 
 const stats = [

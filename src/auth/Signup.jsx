@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -11,6 +11,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminSecret, setAdminSecret] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -30,10 +32,11 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/ecommerce/auth/register`, {
+      const response = await axios.post(`${API_URL}/auth/register`, {
         name: fullName,
         email: email,
-        password: password
+        password: password,
+        ...(isAdmin && { role: 'admin', adminSecret })
       });
 
       if (response.data.success) {
@@ -41,7 +44,7 @@ const Signup = () => {
         localStorage.setItem('ecommerce_token', response.data.token);
         localStorage.setItem('ecommerce_user', JSON.stringify(response.data.user));
         
-        toast.success("Signup successful! Redirecting...", {
+        toast.success("Signup successful! Please Login Account", {
           autoClose: 2000,
         });
 
@@ -127,6 +130,36 @@ const Signup = () => {
             />
           </div>
 
+          {/* Admin Registration Toggle */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="adminToggle"
+              checked={isAdmin}
+              onChange={(e) => setIsAdmin(e.target.checked)}
+              className="rounded"
+            />
+            <label htmlFor="adminToggle" className="text-sm text-orange-400 font-medium cursor-pointer">
+              Register as Admin
+            </label>
+          </div>
+
+          {/* Admin Secret Key */}
+          {isAdmin && (
+            <div>
+              <label className="block text-sm font-medium text-white mb-1">
+                Admin Secret Key
+              </label>
+              <input
+                value={adminSecret}
+                onChange={(e) => setAdminSecret(e.target.value)}
+                type="password"
+                placeholder="Enter admin secret key"
+                className="w-full px-4 py-2 border border-orange-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-gray-700 text-white"
+              />
+            </div>
+          )}
+
           {/* Terms */}
           <div className="flex items-start gap-2 text-sm">
             <input type="checkbox" className="mt-1 rounded" />
@@ -151,12 +184,12 @@ const Signup = () => {
         {/* Footer */}
         <p className="text-center text-sm text-gray-200 mt-6">
           Already have an account?{" "}
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-blue-600 font-medium hover:underline"
           >
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

@@ -1,115 +1,197 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../contextFile/CartContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useEcommerceAuth } from "../contexts/EcommerceAuthContext";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function Checkout() {
   const { cartItems, getTotalPrice } = useCart();
+  const { user } = useEcommerceAuth();
   const total = getTotalPrice() ?? 0;
-
   const navigate = useNavigate();
 
-  const handlePlaceOrder = () => {
-    toast.success("Order Placed Successfully!", {
-      autoClose: 1500,
-    });
-    navigate("/dashboard");
+  const [form, setForm] = useState({
+    fullName: user?.name || "",
+    email: user?.email || "",
+    phone: "",
+    city: "",
+    address: "",
+    paymentMethod: "cash",
+  });
+  const [placing, setPlacing] = useState(false);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
+    if (!user) {
+      toast.error("Please login to place an order");
+      navigate("/login");
+      return;
+    }
+
+    setPlacing(true);
+    try {
+      const token = localStorage.getItem("ecommerce_token");
+
+      // Map cart items to order format
+      const items = cartItems.map((item) => ({
+        foodItem: item._id || item.id,
+        quantity: item.cartQty,
+        price: item.price,
+      }));
+
+      const payload = {
+        items,
+        totalAmount: total,
+        deliveryAddress: {
+          street: form.address,
+          city: form.city,
+          phone: form.phone,
+        },
+        paymentMethod: form.paymentMethod,
+      };
+
+      const res = await fetch(`${API_URL}/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Order failed");
+
+      toast.success("Order placed successfully!", { autoClose: 2000 });
+      navigate("/");
+    } catch (err) {
+      toast.error(err.message || "Failed to place order");
+    } finally {
+      setPlacing(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+        <form onSubmit={handlePlaceOrder} className="lg:col-span-2 space-y-6">
           <div className="bg-gray-800 text-gray-100 rounded-2xl shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
+                name="fullName"
+                value={form.fullName}
+                onChange={handleChange}
                 type="text"
                 placeholder="Full Name"
+                required
                 className="border p-3 rounded-xl w-full bg-gray-700 text-white"
               />
               <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 type="email"
                 placeholder="Email Address"
+                required
                 className="border p-3 rounded-xl w-full bg-gray-700 text-white"
               />
               <input
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
                 type="text"
                 placeholder="Phone Number"
+                required
                 className="border p-3 rounded-xl w-full bg-gray-700 text-white"
               />
               <input
+                name="city"
+                value={form.city}
+                onChange={handleChange}
                 type="text"
                 placeholder="City"
+                required
                 className="border p-3 rounded-xl w-full bg-gray-700 text-white"
               />
             </div>
             <textarea
+              name="address"
+              value={form.address}
+              onChange={handleChange}
               placeholder="Full Address"
-              className="border p-3 rounded-xl w-full mt-4 h-62 resize-none bg-gray-700 text-white"
+              required
+              className="border p-3 rounded-xl w-full mt-4 h-24 resize-none bg-gray-700 text-white"
             />
           </div>
 
-          {/* Payment Method */}
           <div className="bg-gray-800 text-gray-100 rounded-2xl shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Payment Method</h2>
             <div className="space-y-3">
-              <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer bg-gray-700">
-                <input type="radio" name="payment" />
-                <span>Cash on Delivery</span>
-              </label>
-              <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer bg-gray-700">
-                <input type="radio" name="payment" />
-                <span>Credit / Debit Card</span>
-              </label>
-              <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer bg-gray-700">
-                <input type="radio" name="payment" />
-                <span>JazzCash / EasyPaisa</span>
-              </label>
+              {[
+                { value: "cash", label: "Cash on Delivery" },
+                { value: "card", label: "Credit / Debit Card" },
+                { value: "online", label: "JazzCash / EasyPaisa" },
+              ].map((opt) => (
+                <label key={opt.value} className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer bg-gray-700">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={opt.value}
+                    checked={form.paymentMethod === opt.value}
+                    onChange={handleChange}
+                  />
+                  <span>{opt.label}</span>
+                </label>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* RIGHT SIDE: Order Summary */}
+          <button
+            type="submit"
+            disabled={placing}
+            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white py-3 rounded-xl font-semibold"
+          >
+            {placing ? "Placing Order..." : "Place Order"}
+          </button>
+        </form>
+
+        {/* Order Summary */}
         <div className="bg-gray-800 text-gray-100 rounded-2xl shadow p-6 h-fit">
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-
           <div className="space-y-4">
-            {/* Dynamic Cart Items */}
             {cartItems.length === 0 ? (
               <p className="text-gray-400">Your cart is empty</p>
             ) : (
-              cartItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-4">
+              cartItems.map((item, i) => (
+                <div key={i} className="flex items-center gap-4">
                   <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-20 h-20 rounded-xl"
+                    src={item.imageURL || item.image}
+                    alt={item.name || item.title}
+                    className="w-16 h-16 rounded-xl object-cover"
                   />
                   <div className="flex-1">
-                    <p className="font-semibold">{item.title}</p>
-                    {item.drink && (
-                      <p className="text-gray-400 text-sm">
-                        Drink: {item.drink.name} (+${item.drink.price})
-                      </p>
-                    )}
-                    <p className="text-gray-300">Qty: {item.cartQty}</p>
-                    <p className="font-semibold">
-                      $
-                      {(
-                        (item.price + (item.drink?.price ?? 0)) *
-                        item.cartQty
-                      ).toFixed(2)}
-                    </p>
+                    <p className="font-semibold">{item.name || item.title}</p>
+                    <p className="text-gray-300 text-sm">Qty: {item.cartQty}</p>
+                    <p className="font-semibold">PKR {(item.price * item.cartQty).toLocaleString()}</p>
                   </div>
                 </div>
               ))
             )}
-
-            {/* Summary */}
             <div className="flex justify-between border-t border-gray-600 pt-4">
               <span>Subtotal</span>
-              <span>${total.toFixed(2)}</span>
+              <span>PKR {total.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
@@ -117,16 +199,9 @@ function Checkout() {
             </div>
             <div className="flex justify-between font-bold text-lg border-t border-gray-600 pt-4">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>PKR {total.toLocaleString()}</span>
             </div>
           </div>
-
-          <button
-            onClick={handlePlaceOrder}
-            className="block w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl mt-6 text-center font-semibold"
-          >
-            Place Order
-          </button>
         </div>
       </div>
     </div>

@@ -1,133 +1,141 @@
-import { Link } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { useState } from "react";
+import { useEcommerceAuth } from "../../contexts/EcommerceAuthContext";
+import { toast } from "react-toastify";
 
 export default function Settings() {
+  const { user, updateProfile, updatePassword } = useEcommerceAuth();
+
+  const [profile, setProfile] = useState({ name: user?.name || "", email: user?.email || "" });
+  const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  const handleProfileSave = async (e) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    const result = await updateProfile(profile);
+    setSavingProfile(false);
+    if (result?.success) {
+      toast.success("Profile updated successfully");
+    } else {
+      toast.error(result?.message || "Failed to update profile");
+    }
+  };
+
+  const handlePasswordSave = async (e) => {
+    e.preventDefault();
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    if (passwords.newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+    setSavingPassword(true);
+    const result = await updatePassword(passwords.currentPassword, passwords.newPassword);
+    setSavingPassword(false);
+    if (result?.success) {
+      toast.success("Password updated successfully");
+      setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    } else {
+      toast.error(result?.message || "Failed to update password");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black flex justify-center items-start py-10">
-      <Link
-        to="/dashboard"
-        className="fixed left-10 top-30 z-50 flex items-center gap-2 text-blue-500 text-lg hover:text-blue-600"
-      >
-        <FaArrowLeft />
-        Back
-      </Link>
       <div className="w-[90%] max-w-5xl space-y-6">
-        <div className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+
+        {/* Profile Settings */}
+        <form onSubmit={handleProfileSave} className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="username" className="block mb-1">
-                Username
-              </label>
+              <label className="block mb-1 text-sm">Name</label>
               <input
-                id="username"
-                placeholder="Enter your username"
+                value={profile.name}
+                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                placeholder="Enter your name"
                 className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block mb-1">
-                Email
-              </label>
+              <label className="block mb-1 text-sm">Email</label>
               <input
-                id="email"
+                value={profile.email}
+                onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                 type="email"
                 placeholder="Enter your email"
                 className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
               />
             </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <button
+              type="submit"
+              disabled={savingProfile}
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-6 py-2 rounded text-white font-semibold"
+            >
+              {savingProfile ? "Saving..." : "Save Profile"}
+            </button>
+          </div>
+        </form>
+
+        {/* Password Settings */}
+        <form onSubmit={handlePasswordSave} className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label htmlFor="password" className="block mb-1">
-                Password
-              </label>
+              <label className="block mb-1 text-sm">Current Password</label>
               <input
-                id="password"
+                value={passwords.currentPassword}
+                onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
                 type="password"
-                placeholder="Enter new password"
+                placeholder="Current password"
+                required
                 className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="block mb-1">
-                Confirm Password
-              </label>
+              <label className="block mb-1 text-sm">New Password</label>
               <input
-                id="confirmPassword"
+                value={passwords.newPassword}
+                onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                type="password"
+                placeholder="New password"
+                required
+                className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-sm">Confirm Password</label>
+              <input
+                value={passwords.confirmPassword}
+                onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
                 type="password"
                 placeholder="Confirm new password"
+                required
                 className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
               />
             </div>
           </div>
-        </div>
-
-        <div className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Notification Settings</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="notifications" className="block mb-1">
-                Notifications
-              </label>
-              <select
-                id="notifications"
-                className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
-              >
-                <option value="all">All</option>
-                <option value="important">Only Important</option>
-                <option value="none">None</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="newsletter" className="block mb-1">
-                Newsletter Subscription
-              </label>
-              <select
-                id="newsletter"
-                className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
-              >
-                <option value="subscribed">Subscribed</option>
-                <option value="unsubscribed">Unsubscribed</option>
-              </select>
-            </div>
+          <div className="flex justify-end mt-4">
+            <button
+              type="submit"
+              disabled={savingPassword}
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-6 py-2 rounded text-white font-semibold"
+            >
+              {savingPassword ? "Updating..." : "Update Password"}
+            </button>
           </div>
-        </div>
+        </form>
 
-        {/* Privacy Settings Card */}
+        {/* Admin Info */}
         <div className="bg-gray-800 text-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Privacy Settings</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="profileVisibility" className="block mb-1">
-                Profile Visibility
-              </label>
-              <select
-                id="profileVisibility"
-                className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
-              >
-                <option value="public">Public</option>
-                <option value="friends">Friends Only</option>
-                <option value="private">Private</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="activityStatus" className="block mb-1">
-                Show Activity Status
-              </label>
-              <select
-                id="activityStatus"
-                className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
-              >
-                <option value="on">On</option>
-                <option value="off">Off</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <button className="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded text-white font-semibold">
-            Save Changes
-          </button>
+          <h2 className="text-xl font-semibold mb-2">Admin Info</h2>
+          <p className="text-gray-400 text-sm">Role: <span className="text-white capitalize">{user?.role}</span></p>
+          <p className="text-gray-400 text-sm mt-1">Member since: <span className="text-white">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—"}</span></p>
         </div>
       </div>
     </div>

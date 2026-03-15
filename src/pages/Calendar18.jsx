@@ -8,13 +8,6 @@ export function Calendar18() {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <Link
-        to="/dashboard"
-        className="fixed left-10 top-30 z-50 flex items-center gap-2 text-blue-500 text-lg hover:text-blue-600"
-      >
-        <FaArrowLeft />
-        Back
-      </Link>
       <Calendar
         mode="single"
         selected={date}

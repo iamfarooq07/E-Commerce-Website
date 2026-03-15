@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -9,88 +10,200 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { fetchAdminOrders, updateOrderStatus } from "../../services/api";
+
+const STATUS_CYCLE = [
+  "pending",
+  "confirmed",
+  "preparing",
+  "delivered",
+  "cancelled",
+];
+
+const badgeVariant = (status) => {
+  if (status === "delivered") return "success";
+  if (status === "cancelled") return "destructive";
+  return "warning";
+};
+
+const badgeClass = (status) => {
+  if (status === "delivered") return "bg-green-700 text-green-200";
+  if (status === "cancelled") return "bg-red-700 text-red-200";
+  if (status === "preparing") return "bg-blue-700 text-blue-200";
+  if (status === "confirmed") return "bg-yellow-700 text-yellow-200";
+  return "bg-gray-600 text-gray-200";
+};
 
 export default function Orders() {
-  const orders = [
-    { id: 1, customer: "Ali Khan", total: "$120", status: "Pending" },
-    { id: 2, customer: "Sara Ahmed", total: "$250", status: "Completed" },
-    { id: 3, customer: "John Doe", total: "$75", status: "Cancelled" },
-    { id: 4, customer: "Ayesha Ali", total: "$180", status: "Pending" },
-    { id: 5, customer: "Omar Farooq", total: "$320", status: "Completed" },
-    { id: 6, customer: "Hina Shah", total: "$60", status: "Pending" },
-    { id: 7, customer: "Bilal Hassan", total: "$400", status: "Completed" },
-    { id: 8, customer: "Zara Khan", total: "$90", status: "Cancelled" },
-    { id: 9, customer: "Usman Iqbal", total: "$150", status: "Pending" },
-    { id: 10, customer: "Maria Javed", total: "$220", status: "Completed" },
-    { id: 11, customer: "Ahmed Raza", total: "$310", status: "Pending" },
-    { id: 12, customer: "Sana Mirza", total: "$200", status: "Completed" },
-    { id: 13, customer: "Farah Khan", total: "$140", status: "Cancelled" },
-    { id: 14, customer: "Naveed Ali", total: "$175", status: "Pending" },
-    { id: 15, customer: "Fatima Tariq", total: "$260", status: "Completed" },
-    { id: 16, customer: "Imran Shah", total: "$95", status: "Pending" },
-    { id: 17, customer: "Kiran Ahmed", total: "$340", status: "Completed" },
-    { id: 18, customer: "Rashid Khan", total: "$80", status: "Cancelled" },
-    { id: 19, customer: "Lubna Iqbal", total: "$190", status: "Pending" },
-    { id: 20, customer: "Hamza Ali", total: "$230", status: "Completed" },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
+
+  useEffect(() => {
+    fetchAdminOrders()
+      .then(setOrders)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleStatusUpdate = async (id, currentStatus) => {
+    const nextIndex =
+      (STATUS_CYCLE.indexOf(currentStatus) + 1) % STATUS_CYCLE.length;
+    const nextStatus = STATUS_CYCLE[nextIndex];
+    try {
+      await updateOrderStatus(id, nextStatus);
+      setOrders((prev) =>
+        prev.map((o) => (o._id === id ? { ...o, status: nextStatus } : o)),
+      );
+      toast.success(`Order status updated to ${nextStatus}`);
+    } catch (e) {
+      toast.error("Failed to update status: " + e.message);
+    }
+  };
 
   return (
-    <div>
-      <Link
-        to="/dashboard"
-        className="fixed left-10 top-30 z-50 flex items-center gap-2 text-blue-500 text-lg hover:text-blue-600"
-      >
-        <FaArrowLeft />
-        Back
-      </Link>
-
-      <div className="flex justify-center items-center bg-black">
-        <Card className=" bg-gray-800 text-white mt-10 w-[80%]">
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-          </CardHeader>
-          <CardContent>
+    <div className="flex justify-center items-start bg-black min-h-screen py-10">
+      <Card className="bg-gray-800 text-white w-[90%]">
+        <CardHeader>
+          <CardTitle>Orders ({orders.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading && (
+            <p className="text-gray-400 text-sm">Loading orders...</p>
+          )}
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {!loading && !error && (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableCell>Order ID</TableCell>
-                  <TableCell>Customer</TableCell>
-                  <TableCell>Total</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableHead className="text-white">Order ID</TableHead>
+                  <TableHead className="text-white">Customer</TableHead>
+                  <TableHead className="text-white">Items</TableHead>
+                  <TableHead className="text-white">Total</TableHead>
+                  <TableHead className="text-white">Payment</TableHead>
+                  <TableHead className="text-white">Date</TableHead>
+                  <TableHead className="text-white">Status</TableHead>
+                  <TableHead className="text-white">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.customer}</TableCell>
-                    <TableCell>{order.total}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          order.status === "Completed"
-                            ? "success"
-                            : order.status === "Pending"
-                            ? "warning"
-                            : "destructive"
-                        }
+                  <>
+                    <TableRow
+                      key={order._id}
+                      className="cursor-pointer hover:bg-gray-700/50"
+                      onClick={() =>
+                        setExpandedId(
+                          expandedId === order._id ? null : order._id,
+                        )
+                      }
+                    >
+                      <TableCell className="font-mono text-xs">
+                        {order._id.slice(-6).toUpperCase()}
+                      </TableCell>
+                      <TableCell>
+                        <div>{order.user?.name ?? "Guest"}</div>
+                        <div className="text-xs text-gray-400">
+                          {order.user?.email}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-gray-300 text-xs">
+                        {order.items?.length ?? 0} item(s)
+                      </TableCell>
+                      <TableCell>
+                        PKR {order.totalAmount?.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {order.paymentMethod}
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-400">
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`text-xs font-semibold px-2 py-1 rounded-full capitalize ${badgeClass(order.status)}`}
+                        >
+                          {order.status}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          className="bg-gray-700"
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStatusUpdate(order._id, order.status);
+                          }}
+                          disabled={
+                            order.status === "cancelled" ||
+                            order.status === "delivered"
+                          }
+                        >
+                          Next Status
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    {expandedId === order._id && (
+                      <TableRow
+                        key={`${order._id}-detail`}
+                        className="bg-gray-900"
                       >
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button size="sm">View</Button>
+                        <TableCell colSpan={8} className="py-3 px-6">
+                          <div className="text-sm space-y-2">
+                            <p className="font-semibold text-gray-300">
+                              Order Items:
+                            </p>
+                            <div className="space-y-1">
+                              {order.items?.map((item, i) => (
+                                <div
+                                  key={i}
+                                  className="flex justify-between text-gray-400"
+                                >
+                                  <span>
+                                    {item.foodItem?.name ?? "Unknown"} ×{" "}
+                                    {item.quantity}
+                                  </span>
+                                  <span>
+                                    PKR{" "}
+                                    {(
+                                      item.price * item.quantity
+                                    ).toLocaleString()}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            {order.deliveryAddress && (
+                              <p className="text-gray-400 text-xs mt-2">
+                                Address: {order.deliveryAddress.street},{" "}
+                                {order.deliveryAddress.city}
+                                {order.deliveryAddress.phone &&
+                                  ` | Phone: ${order.deliveryAddress.phone}`}
+                              </p>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                ))}
+                {orders.length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="text-center text-gray-400"
+                    >
+                      No orders found
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
-      </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -3,11 +3,13 @@ import { useState } from "react";
 import logo from "./logo.png";
 import { useAuth } from "@/contextFile/AuthContext";
 import { useCart } from "@/contextFile/CartContext";
+import { useEcommerceAuth } from "@/contexts/EcommerceAuthContext";
 
 function Header() {
   const [open, setOpen] = useState(false);
   const { user, idName, logout } = useAuth();
   const { totalCartItems } = useCart();
+  const { isAdmin } = useEcommerceAuth();
 
   return (
     <header className="sticky top-0 z-50 bg-black border-b shadow-lg">
@@ -35,6 +37,16 @@ function Header() {
           >
             Products
           </Link>
+
+          {/* Dashboard - only for admins */}
+          {isAdmin && (
+            <Link
+              to="/dashboard"
+              className="text-white hover:text-orange-400 transition duration-200"
+            >
+              Dashboard
+            </Link>
+          )}
 
           {/* Cart */}
           <Link
@@ -117,6 +129,17 @@ function Header() {
           >
             Products
           </Link>
+
+          {/* Dashboard - only for admins */}
+          {isAdmin && (
+            <Link
+              to="/dashboard"
+              className="block text-white hover:text-orange-400"
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
+            </Link>
+          )}
           <Link
             to="/cart"
             className="block text-white hover:text-orange-400"

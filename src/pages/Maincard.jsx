@@ -1,18 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../contextFile/CartContext";
 
 function Maincard({ product }) {
+  const { addToCart } = useCart();
+  const id = product._id || product.id;
+  const title = product.name || product.title;
+  const image = product.imageURL || product.image;
+
+  const handleAddToCart = () => {
+    const normalized = { ...product, id, title, image };
+    addToCart(normalized, 1, { id: 0, name: "No Drink", price: 0 });
+  };
+
   return (
     <div className="bg-gray-800 text-white w-full border-white rounded-xl shadow-xl p-4 border-2">
-      <Link to={`/products/${product.id}`}>
+      <Link to={`/products/${id}`}>
         <img
-          src={product.image}
-          alt={product.title}
+          src={image}
+          alt={title}
           className="w-full h-48 object-cover rounded-lg"
         />
       </Link>
 
-      <h1 className="mt-4 text-xl font-bold">{product.title}</h1>
+      <h1 className="mt-4 text-xl font-bold">{title}</h1>
 
       <p className="mt-2 text-gray-200 text-sm leading-relaxed">
         {product.description}
@@ -23,7 +34,7 @@ function Maincard({ product }) {
           Rs {product.price}
         </h3>
 
-        <button className="border-white flex items-center gap-2 border px-3 py-1.5 rounded-lg font-medium hover:bg-black hover:scale-105 transition-all duration-300">
+        <button onClick={handleAddToCart} className="border-white flex items-center gap-2 border px-3 py-1.5 rounded-lg font-medium hover:bg-black hover:scale-105 transition-all duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
